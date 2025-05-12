@@ -75,24 +75,110 @@ final List<Ingredient> dummyIngredients = [
     name: 'Eggs',
     quantity: 2,
     unit: 'pieces',
+      imageUrl:
+          'https://cdn.britannica.com/94/151894-050-F72A5317/Brown-eggs.jpg'
   ),
   Ingredient(
     id: '2',
     name: 'Milk',
     quantity: 1,
     unit: 'cup',
+      imageUrl:
+          'https://images.immediate.co.uk/production/volatile/sites/30/2020/02/Glass-and-bottle-of-milk-fe0997a.jpg'
+
   ),
   Ingredient(
     id: '3',
     name: 'Flour',
     quantity: 2,
     unit: 'cups',
+      imageUrl:
+          'https://www.unlockfood.ca/EatRightOntario/media/Website-images-resized/All-about-grain-flours-resized.jpg'
   ),
   Ingredient(
     id: '4',
     name: 'Sugar',
     quantity: 1,
     unit: 'cup',
+      imageUrl:
+          'https://www.tasteofhome.com/wp-content/uploads/2019/11/sugar-shutterstock_615908132.jpg'),
+  Ingredient(
+      id: '5',
+      name: 'Arborio rice',
+      quantity: 1,
+      unit: 'cup',
+      imageUrl:
+          'https://d121ck0xk6rnj0.cloudfront.net/eyJidWNrZXQiOiJyaXZpYW5hLWJ1Y2tldCIsImtleSI6ImltYWdlcy8wMDA3NDQwMTkxMDQxMV9BMUMxLnBuZyIsImVkaXRzIjp7InBuZyI6eyJxdWFsaXR5IjoxMDAsInByb2dyZXNzaXZlIjp0cnVlfSwicmVzaXplIjp7IndpZHRoIjoxMjAwLCJoZWlnaHQiOjEyMDAsImZpdCI6ImNvdmVyIn19fQ=='),
+  Ingredient(
+      id: '6',
+      name: 'Saffron threads',
+      quantity: 1,
+      unit: 'pinch',
+      imageUrl:
+          'https://www.thespruceeats.com/thmb/eJYslYlYwE5FiTce-7ax2-0GBZ4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/saffron-GettyImages-157531690-59b62582685fbe0011e9d88b.jpg'),
+  Ingredient(
+      id: '7',
+      name: 'Chicken broth',
+      quantity: 4,
+      unit: 'cups',
+      imageUrl:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeDEmGVsaJta53GurDBbyJRKm0izXjmBFIwA&s'),
+  Ingredient(
+      id: '8',
+      name: 'Parmesan cheese',
+      quantity: 0.5,
+      unit: 'cup',
+      imageUrl:
+          'https://shop.ibis-salumi.com/cdn/shop/products/ibis-parmigianoreggiano_1024x1024@2x.jpg?v=1669909885'),
+  Ingredient(
+      id: '9',
+      name: 'Butter',
+      quantity: 2,
+      unit: 'tablespoons',
+      imageUrl:
+          'https://www.botallaformaggi.com/new/wp-content/uploads/2019/11/Burro_BOTFOR024R317.png'),
+  Ingredient(
+      id: '10',
+      name: 'Onion',
+      quantity: 1,
+      unit: 'small',
+      imageUrl:
+          'https://www.cuki.it/wp-content/uploads/come-conservare-cipolla-di-tropea.jpg'),
+  Ingredient(
+      id: '11',
+      name: 'Pizza dough',
+      quantity: 1,
+      unit: 'ball',
+      imageUrl:
+          'https://joyfoodsunshine.com/wp-content/uploads/2018/09/easy-homemade-pizza-dough-recipe-2-1-500x500.jpg'),
+  Ingredient(
+      id: '12',
+      name: 'Tomato sauce',
+      quantity: 0.5,
+      unit: 'cup',
+      imageUrl:
+          'https://mutti-parma.com/app/uploads/sites/7/2019/09/passata-700-1-411x1024.png'),
+  Ingredient(
+    id: '13',
+    name: 'Mozzarella cheese',
+    quantity: 1,
+    unit: 'cup',
+    imageUrl:
+        'https://www.assolatte.it/zpublish/4/uploads/4/salut_news/14694326891827206047_mozzarella.jpg',
+  ),
+  Ingredient(
+      id: '14',
+      name: 'Fresh basil leaves',
+      quantity: 5,
+      unit: 'pieces',
+      imageUrl:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4aV36IudUUYyxtdEulfDkNzoYZIzgKolYBw&s'),
+  Ingredient(
+      id: '15',
+      name: 'Olive oil',
+      quantity: 1,
+      unit: 'tablespoon',
+      imageUrl: 'https://www.b2x.it/rest/images/2024/06/26/1514947.jpg'
   ),
 ];
 
@@ -109,8 +195,13 @@ final recipeList = [
     description:
         'These fluffy pancakes are perfect for a quick and delicious breakfast.',
     imageUrl:
-        'https://www.onceuponachef.com/images/2009/08/pancakes-01-760x1040.jpg',
-    ingredients: dummyIngredients,
+        'https://d2sj0xby2hzqoy.cloudfront.net/kenwood_italy/attachments/data/000/008/235/original/pancake-americani.JPG',
+    ingredients: [
+      dummyIngredients[0], // Eggs
+      dummyIngredients[1], // Milk
+      dummyIngredients[2], // Flour
+      dummyIngredients[3], // Sugar
+    ],
     steps: [
       PrepStep(
         id: 1,
@@ -121,6 +212,7 @@ final recipeList = [
         description: 'Cook on a hot griddle until golden brown.',
       ),
     ],
+    lastUpdated: DateTime(2024, 9, 20),
   ),
   Recipe(
     id: '2',
@@ -135,7 +227,9 @@ final recipeList = [
         'This grilled salmon is marinated in lemon and herbs for a fresh flavor.',
     imageUrl:
         'https://www.giallozafferano.it/images/10-1041/Salmone-grigliato-con-salsa-al-prezzemolo_780x520_wm.jpg',
-    ingredients: dummyIngredients,
+    ingredients: [
+      dummyIngredients[14], // Olive oil
+    ],
     steps: [
       PrepStep(
         id: 1,
@@ -146,6 +240,7 @@ final recipeList = [
         description: 'Grill until cooked through.',
       ),
     ],
+    lastUpdated: DateTime(2024, 9, 18),
   ),
   Recipe(
     id: '3',
@@ -161,42 +256,12 @@ final recipeList = [
     imageUrl:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-8-7N-De4Arg9552Zer1dyiBCzSZeN-hRGQ&s',
     ingredients: [
-      Ingredient(
-        id: '5',
-        name: 'Arborio rice',
-        quantity: 1,
-        unit: 'cup',
-      ),
-      Ingredient(
-        id: '6',
-        name: 'Saffron threads',
-        quantity: 1,
-        unit: 'pinch',
-      ),
-      Ingredient(
-        id: '7',
-        name: 'Chicken broth',
-        quantity: 4,
-        unit: 'cups',
-      ),
-      Ingredient(
-        id: '8',
-        name: 'Parmesan cheese',
-        quantity: 0.5,
-        unit: 'cup',
-      ),
-      Ingredient(
-        id: '9',
-        name: 'Butter',
-        quantity: 2,
-        unit: 'tablespoons',
-      ),
-      Ingredient(
-        id: '10',
-        name: 'Onion',
-        quantity: 1,
-        unit: 'small',
-      ),
+      dummyIngredients[4], // Arborio rice
+      dummyIngredients[5], // Saffron threads
+      dummyIngredients[6], // Chicken broth
+      dummyIngredients[7], // Parmesan cheese
+      dummyIngredients[8], // Butter
+      dummyIngredients[9], // Onion
     ],
     steps: [
       PrepStep(
@@ -232,6 +297,7 @@ final recipeList = [
         description: 'Stir in Parmesan cheese and adjust seasoning.',
       ),
     ],
+    lastUpdated: DateTime(2024, 9, 31),
   ),
 ];
 
@@ -249,7 +315,10 @@ final friendReceipts = [
         'Spaghetti Carbonara is a classic Italian pasta dish made with eggs, cheese, pancetta, and pepper.',
     imageUrl:
         'https://www.informacibo.it/wp-content/uploads/2018/04/carbonara.jpg',
-    ingredients: dummyIngredients,
+    ingredients: [
+      dummyIngredients[0], // Eggs
+      dummyIngredients[7], // Parmesan cheese
+    ],
     steps: [
       PrepStep(
         id: 1,
@@ -284,36 +353,11 @@ final friendReceipts = [
     imageUrl:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg/800px-Eq_it-na_pizza-margherita_sep2005_sml.jpg',
     ingredients: [
-      Ingredient(
-        id: '11',
-        name: 'Pizza dough',
-        quantity: 1,
-        unit: 'ball',
-      ),
-      Ingredient(
-        id: '12',
-        name: 'Tomato sauce',
-        quantity: 0.5,
-        unit: 'cup',
-      ),
-      Ingredient(
-        id: '13',
-        name: 'Mozzarella cheese',
-        quantity: 1,
-        unit: 'cup',
-      ),
-      Ingredient(
-        id: '14',
-        name: 'Fresh basil leaves',
-        quantity: 5,
-        unit: 'pieces',
-      ),
-      Ingredient(
-        id: '15',
-        name: 'Olive oil',
-        quantity: 1,
-        unit: 'tablespoon',
-      ),
+      dummyIngredients[10], // Pizza dough
+      dummyIngredients[11], // Tomato sauce
+      dummyIngredients[12], // Mozzarella cheese
+      dummyIngredients[13], // Fresh basil leaves
+      dummyIngredients[14], // Olive oil
     ],
     steps: [
       PrepStep(

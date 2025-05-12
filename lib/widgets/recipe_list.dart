@@ -9,11 +9,13 @@ class RecipListTile extends StatelessWidget {
     required this.title,
     required this.recipes,
     this.showTitle = true,
+    this.maxItems = 3,
   });
 
   final String title;
   final List<Recipe> recipes;
   final bool showTitle;
+  final int maxItems;
 
   @override
   Widget build(BuildContext context) {
@@ -22,48 +24,48 @@ class RecipListTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (showTitle)
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).primaryColor,
-            ),
-            textAlign: TextAlign.left,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
+                textAlign: TextAlign.left,
+              ),
+              TextButton(
+                onPressed: () {
+                  // Add your navigation or action logic here
+                },
+                child: Text(
+                  'See Other',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
         const SizedBox(height: 8),
         Column(
           children: List.generate(
-            recipes.length > 3 ? 3 : recipes.length,
+            recipes.length > maxItems ? maxItems : recipes.length,
             (index) => Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
               margin: const EdgeInsets.symmetric(vertical: 2.0),
               child: RecipeItem(
-                recipe: recipes[index]
-            ),
-          ),
-        )),
-        const SizedBox(height: 8), // Adjust spacing if needed
-        Row(
-          mainAxisAlignment:
-              MainAxisAlignment.end, // Aligns the button to the right
-          children: [
-            TextButton(
-              onPressed: () {
-                // Add your navigation or action logic here
-              },
-              child: Text(
-                'See Other',
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.bold,
-                ),
+                recipe: recipes[index],
               ),
             ),
-          ],
+          ),
         ),
+        const SizedBox(height: 8), // Adjust spacing if needed
       ],
     );
   }

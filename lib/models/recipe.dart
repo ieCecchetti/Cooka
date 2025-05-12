@@ -19,6 +19,8 @@ class Recipe {
   List<Ingredient> ingredients;
   List<PrepStep> steps;
 
+  DateTime lastUpdated; // The last update timestamp for the recipe.
+
   Recipe({
     // general
     required this.id,
@@ -35,12 +37,13 @@ class Recipe {
     // deep dive
     required this.ingredients,
     required this.steps,
-  });
-  
+
+    // optional
+    DateTime? lastUpdated,
+  }) : lastUpdated = lastUpdated ?? DateTime.now();
 
   @override
   String toString() {
     return 'Recipe{id: $id, name: $name, description: $description, imageUrl: $imageUrl, ingredients: $ingredients, steps: $steps}';
   }
-
 }

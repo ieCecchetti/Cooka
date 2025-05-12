@@ -1,10 +1,10 @@
-import 'package:cooka/models/recipe.dart';
+import 'package:cooka/models/ingredient.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cooka/data/dummy.dart';
 
 
-class RecipeNotifier extends StateNotifier<List<Recipe>> {
-  RecipeNotifier() : super([]) {
+class IngredientNotifier extends StateNotifier<List<Ingredient>> {
+  IngredientNotifier() : super([]) {
     _initializeTransactions();
   }
 
@@ -12,46 +12,46 @@ class RecipeNotifier extends StateNotifier<List<Recipe>> {
   /// Initialize transactions from the database
   Future<void> _initializeTransactions() async {
     // TODO : Implement the logic to fetch recipes from the database
-    final recipes = recipeList; // Replace with actual database fetching logic
-    state = recipes;
+    final ingredients = dummyIngredients; // Replace with actual database fetching logic
+    state = ingredients;
   }
 
   // Add a new transaction
-  void addRecipe(Recipe transaction) async {
+  void addIngredient(Ingredient ingredient) async {
     // Insert into the database
     // await _dbHelper.insert('financial_record', transaction.toMap());
-    state = [...state, transaction];
+    state = [...state, ingredient];
   }
 
   // Remove a transaction
-  void removeRecipe(Recipe transaction) async {
+  void removeIngredient(Ingredient ingredient) async {
     // Remove from the database
     // await _dbHelper.delete('financial_record', transaction.id);
-    state = state.where((element) => element.id != transaction.id).toList();
+    state = state.where((element) => element.id != ingredient.id).toList();
   }
 
   // Update an existing transaction
-  void updateRecipe(Recipe transaction) async {
+  void updateIngredient(Ingredient ingredient) async {
     // Update the transaction in the database
     // await _dbHelper.update('financial_record', transaction.toMap());
     // Update the transaction in the state
-    state = state.map((item) => item.id == transaction.id ? transaction : item).toList();
+    state = state.map((item) => item.id == ingredient.id ? ingredient : item).toList();
   }
 
-  void rebuildRecipe(Recipe transaction) {
+  void rebuildIngredient(Ingredient ingredient) {
     // Re-add the item to the state
-    state = [...state, transaction];
+    state = [...state, ingredient];
   }
 
   // Refresh (reload) the categories from db (case de-sync with db)
-  Future<void> refreshRecipe() async {
+  Future<void> refreshIngredients() async {
     await _initializeTransactions();
   }
 }
 
-final recipesProvider =
-    StateNotifierProvider<RecipeNotifier, List<Recipe>>((ref) {
-  return RecipeNotifier();
+final ingredientsProvider =
+    StateNotifierProvider<IngredientNotifier, List<Ingredient>>((ref) {
+  return IngredientNotifier();
 });
 
 
@@ -59,13 +59,13 @@ final recipesProvider =
 final searchQueryProvider = StateProvider<String>((ref) => '');
 
 // Filters recipes based on search query
-final filteredRecipesProvider = Provider<List<Recipe>>((ref) {
+final filteredIngredientProvider = Provider<List<Ingredient>>((ref) {
   final query = ref.watch(searchQueryProvider).toLowerCase();
-  final recipes = ref.watch(recipesProvider);
+  final ingredients = ref.watch(ingredientsProvider);
 
-  if (query.isEmpty) return recipes;
+  if (query.isEmpty) return ingredients;
 
-  return recipes
-      .where((recipe) => recipe.name.toLowerCase().contains(query))
+  return ingredients
+      .where((ingredient) => ingredient.name.toLowerCase().contains(query))
       .toList();
 });

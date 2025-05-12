@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:cooka/widgets/recipe_list.dart';
 import 'package:cooka/providers/recipe_provider.dart';
+
+import 'package:cooka/widgets/recipe_list.dart';
+import 'package:cooka/widgets/ingredients_list.dart';
+
+// import 'package:cooka/screens/recipe_detail_screen.dart';
+// import 'package:cooka/screens/ingredients_screen.dart';
+import 'package:cooka/screens/add_recipe_screen.dart';
 
 class MainViewScreen extends ConsumerStatefulWidget {
   const MainViewScreen({super.key});
@@ -32,7 +38,33 @@ class _MainViewScreenState extends ConsumerState<MainViewScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('Cooka'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.kitchen),
+            onPressed: () {
+              // Add your action for the ingredients button here
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AddRecipeScreen(),
+                ),
+              );
+              // Add your action for the add button here
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              // Add your action for the settings button here
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -61,14 +93,24 @@ class _MainViewScreenState extends ConsumerState<MainViewScreen> {
               ),
               const SizedBox(height: 20),
               RecipListTile(
-                title: 'Recent Receips',
-                recipes: recipeList,
+                title: 'My Receips',
+                recipes: recipeList
+                  ..sort((a, b) => b.lastUpdated.compareTo(a.lastUpdated)),
                 showTitle: true,
+                maxItems: 3,
               ),
+              const SizedBox(height: 20),
+              IngredientsList(
+                ingredients:
+                    recipeList.expand((recipe) => recipe.ingredients).toList(),
+              ),
+              const SizedBox(height: 20),
               RecipListTile(
-                title: 'Friends Receips',
-                recipes: recipeList,
+                title: 'Popular Receips',
+                recipes: recipeList
+                  ..sort((a, b) => b.lastUpdated.compareTo(a.lastUpdated)),
                 showTitle: true,
+                maxItems: 3,
               ),
             ],
           ),
