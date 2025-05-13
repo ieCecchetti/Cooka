@@ -86,54 +86,51 @@ class _AddStepsPageState extends ConsumerState<AddStepsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "Steps",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          ...steps.map((step) => ListTile(
-                title: Text(step["description"]),
-                subtitle: Text(
-                    "Time: ${step["time"]} min | Difficulty: ${step["difficulty"]}"),
-              )),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: _addStep,
-            child: const Text("Add Step"),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  ref
-                      .read(breadcrumbProvider.notifier)
-                      .setActiveBreadcrumb("Ingredients");
-                  Navigator.pop(context);
-                },
-                child: const Text("Go Back"),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  // Clear breadcrumbs and navigate back to the main screen
-                  print('saving steps');
-                  ScaffoldMessenger.of(context).showSnackBar(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Steps",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
+        ...steps.map((step) => ListTile(
+              title: Text(step["description"]),
+              subtitle: Text(
+                  "Time: ${step["time"]} min | Difficulty: ${step["difficulty"]}"),
+            )),
+        const SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: _addStep,
+          child: const Text("Add Step"),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                ref
+                    .read(breadcrumbProvider.notifier)
+                    .setActiveBreadcrumb("Ingredients");
+                Navigator.pop(context);
+              },
+              child: const Text("Go Back"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Clear breadcrumbs and navigate back to the main screen
+                print('saving steps');
+                ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Steps saved successfully!")),
-                  );
-                  Navigator.pop(context);
-                },
-                child: const Text("Next: Finish"),
-              ),
-            ],
-          ),
-        ],
-      ),
+                );
+                Navigator.pop(context);
+              },
+              child: const Text("Next: Finish"),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

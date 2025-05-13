@@ -111,7 +111,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
         prepTime: int.tryParse(prepTimeController.text) ?? 0,
         difficulty: selectedDifficulty,
         servings: int.tryParse(servingsController.text) ?? 0,
-        category: selectedCategory!, // Use the selected category
+        category: [selectedCategory!], // Use the selected category
         name: nameController.text,
         shortDescription: shortDescriptionController.text,
         description: descriptionController.text,

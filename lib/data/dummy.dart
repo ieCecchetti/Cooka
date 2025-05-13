@@ -189,7 +189,7 @@ final recipeList = [
     prepTime: 30,
     difficulty: Difficulty.easy,
     servings: 4,
-    category: dummyCategories[4],
+    category: [dummyCategories[4]],
     name: 'Pancakes',
     shortDescription: 'Fluffy pancakes for breakfast',
     description:
@@ -220,7 +220,7 @@ final recipeList = [
     prepTime: 45,
     difficulty: Difficulty.medium,
     servings: 4,
-    category: dummyCategories[0],
+    category: [dummyCategories[0]],
     name: 'Grilled Salmon',
     shortDescription: 'Healthy grilled salmon with lemon',
     description:
@@ -248,7 +248,7 @@ final recipeList = [
     prepTime: 60,
     difficulty: Difficulty.hard,
     servings: 4,
-    category: dummyCategories[2],
+    category: [dummyCategories[2]],
     name: 'Risotto allo Zafferano',
     shortDescription: 'Classic Italian saffron risotto',
     description:
@@ -308,7 +308,7 @@ final friendReceipts = [
     prepTime: 30,
     difficulty: Difficulty.easy,
     servings: 4,
-    category: dummyCategories[7],
+    category: [dummyCategories[7]],
     name: 'Spaghetti Carbonara',
     shortDescription: 'Classic Italian pasta dish',
     description:
@@ -345,7 +345,7 @@ final friendReceipts = [
     prepTime: 90,
     difficulty: Difficulty.medium,
     servings: 4,
-    category: dummyCategories[7],
+    category: [dummyCategories[7]],
     name: 'Margherita Pizza',
     shortDescription: 'Classic Italian pizza with tomato, mozzarella, and basil',
     description:

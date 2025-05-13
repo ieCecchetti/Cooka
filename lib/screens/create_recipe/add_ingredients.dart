@@ -22,62 +22,35 @@ class _AddIngredientsPageState extends ConsumerState<AddIngredientsPage> {
     ];
     final List<String> selectedIngredients = [];
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "Select Ingredients",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 8.0,
-            runSpacing: 8.0,
-            children: ingredients.map((ingredient) {
-              final isSelected = selectedIngredients.contains(ingredient);
-              return FilterChip(
-                label: Text(ingredient),
-                selected: isSelected,
-                onSelected: (selected) {
-                  setState(() {
-                    if (selected) {
-                      selectedIngredients.add(ingredient);
-                    } else {
-                      selectedIngredients.remove(ingredient);
-                    }
-                  });
-                },
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                   ref
-                      .read(breadcrumbProvider.notifier)
-                      .setActiveBreadcrumb("Information");
-                  Navigator.pop(context);
-                },
-                child: const Text("Go Back"),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  ref
-                      .read(breadcrumbProvider.notifier)
-                      .setActiveBreadcrumb("Steps");
-                  Navigator.pushNamed(context, 'Steps');
-                },
-                child: const Text("Next: Add Steps"),
-              ),
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Select Ingredients",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 8.0,
+          children: ingredients.map((ingredient) {
+            final isSelected = selectedIngredients.contains(ingredient);
+            return FilterChip(
+              label: Text(ingredient),
+              selected: isSelected,
+              onSelected: (selected) {
+                setState(() {
+                  if (selected) {
+                    selectedIngredients.add(ingredient);
+                  } else {
+                    selectedIngredients.remove(ingredient);
+                  }
+                });
+              },
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }

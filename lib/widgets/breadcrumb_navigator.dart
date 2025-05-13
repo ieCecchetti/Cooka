@@ -15,8 +15,8 @@ class BreadcrumbNavigator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activeBreadcrumb = ref.watch(breadcrumbProvider); // Watch the active breadcrumb
-    final breadcrumbNotifier = ref.read(breadcrumbProvider.notifier);
+    final activeBreadcrumb =
+        ref.watch(breadcrumbProvider); // Watch the active breadcrumb
 
     return Column(
       children: [
@@ -28,9 +28,10 @@ class BreadcrumbNavigator extends ConsumerWidget {
               content: GestureDetector(
                 onTap: () {
                   // Update the active breadcrumb and navigate
-                  final route = allItems[index];
-                  breadcrumbNotifier.setActiveBreadcrumb(route);
-                  Navigator.pushNamed(context, route);
+                  // final route = allItems[index];
+                  // breadcrumbNotifier.setActiveBreadcrumb(route);
+                  // Navigator.pushNamed(context, route);
+                  // do nothing
                 },
                 child: Text(
                   allItems[index],

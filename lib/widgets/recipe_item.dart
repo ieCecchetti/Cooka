@@ -22,10 +22,10 @@ class RecipeItem extends StatelessWidget {
           top: 0,
           right: 4,
           child: CircleAvatar(
-            backgroundColor: recipe.category.color,
+              backgroundColor: recipe.category[0].color,
             radius: 12,
             child: Icon(
-            recipe.category.icon,
+                recipe.category[0].icon,
             size: 16,
             color: Colors.white,
             ),

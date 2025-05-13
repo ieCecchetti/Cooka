@@ -10,7 +10,7 @@ class Recipe {
   Difficulty difficulty;
   int servings; // The number of servings the recipe is designed to make.
 
-  MealCategory category;
+  List<MealCategory> category;
   String name;
   String shortDescription;
   String description;
