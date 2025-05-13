@@ -120,9 +120,6 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
         steps: steps,
       );
 
-      // Save the recipe (e.g., send it to a backend or add it to a list)
-      print(recipe);
-
       // Clear the form
       _formKey.currentState!.reset();
       setState(() {

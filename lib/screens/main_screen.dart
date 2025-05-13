@@ -9,6 +9,7 @@ import 'package:cooka/widgets/ingredients_list.dart';
 // import 'package:cooka/screens/recipe_detail_screen.dart';
 // import 'package:cooka/screens/ingredients_screen.dart';
 import 'package:cooka/screens/add_recipe_screen.dart';
+import 'package:cooka/screens/create_recipe_screen.dart';
 
 class MainViewScreen extends ConsumerStatefulWidget {
   const MainViewScreen({super.key});
@@ -52,7 +53,9 @@ class _MainViewScreenState extends ConsumerState<MainViewScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AddRecipeScreen(),
+                  settings: const RouteSettings(
+                      name: 'Information'), // Set the route name here
+                  builder: (context) => const CreateRecipeScreen(),
                 ),
               );
               // Add your action for the add button here

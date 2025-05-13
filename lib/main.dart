@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 
 import 'package:cooka/screens/opening_screen.dart';
+import 'package:cooka/widgets/breadcrumb_navigator.dart';
 
 final theme = ThemeData(
   useMaterial3: true,
@@ -70,8 +71,7 @@ class Cooka extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Cooka',
-      theme: theme,
-      // home: const MainViewScreen(),
+      theme: theme,      
       home: const OpeningScreen(),
     );
   }
