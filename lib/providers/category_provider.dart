@@ -39,7 +39,7 @@ class CategoryNotifier extends StateNotifier<List<MealCategory>> {
   }
 }
 
-final recipesProvider =
+final categoriesProvider =
     StateNotifierProvider<CategoryNotifier, List<MealCategory>>((ref) {
   return CategoryNotifier();
 });
@@ -51,7 +51,7 @@ final searchQueryProvider = StateProvider<String>((ref) => '');
 // Filters recipes based on search query
 final filteredCategoriesProvider = Provider<List<MealCategory>>((ref) {
   final query = ref.watch(searchQueryProvider).toLowerCase();
-  final categories = ref.watch(recipesProvider);
+  final categories = ref.watch(categoriesProvider);
 
   if (query.isEmpty) return categories;
 

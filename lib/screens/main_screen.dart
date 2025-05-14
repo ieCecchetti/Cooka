@@ -4,11 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cooka/providers/recipe_provider.dart';
 
 import 'package:cooka/widgets/recipe_list.dart';
-import 'package:cooka/widgets/ingredients_list.dart';
+import 'package:cooka/widgets/horizontal_list.dart';
 
 // import 'package:cooka/screens/recipe_detail_screen.dart';
 // import 'package:cooka/screens/ingredients_screen.dart';
-import 'package:cooka/screens/add_recipe_screen.dart';
 import 'package:cooka/screens/create_recipe_screen.dart';
 
 class MainViewScreen extends ConsumerStatefulWidget {
@@ -103,9 +102,11 @@ class _MainViewScreenState extends ConsumerState<MainViewScreen> {
                 maxItems: 3,
               ),
               const SizedBox(height: 20),
-              IngredientsList(
+              HorizontalList(
                 ingredients:
                     recipeList.expand((recipe) => recipe.ingredients).toList(),
+                title: 'Ingredients',
+                showTitle: true,
               ),
               const SizedBox(height: 20),
               RecipListTile(

@@ -1,5 +1,6 @@
-import 'package:cooka/models/prep_step.dart';
 import 'package:cooka/models/ingredient.dart';
+import 'package:cooka/models/measured_ingredient.dart';
+import 'package:cooka/models/prep_step.dart';
 import 'package:cooka/models/meal_category.dart';
 import 'package:cooka/data/difficulty.dart';
 
@@ -12,11 +13,12 @@ class Recipe {
 
   List<MealCategory> category;
   String name;
-  String shortDescription;
   String description;
   String imageUrl;
 
-  List<Ingredient> ingredients;
+  List<Ingredient> ingredients; // A list of all ingredients used in the recipe.
+  Map<String, dynamic>
+      measuredIngredients; // A list of ingredients with their quantities and units.
   List<PrepStep> steps;
 
   DateTime lastUpdated; // The last update timestamp for the recipe.
@@ -31,11 +33,11 @@ class Recipe {
     // dish
     required this.category,
     required this.name,
-    required this.shortDescription,
     required this.description,
     required this.imageUrl,
     // deep dive
     required this.ingredients,
+    required this.measuredIngredients,
     required this.steps,
 
     // optional

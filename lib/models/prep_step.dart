@@ -2,13 +2,15 @@ import 'package:cooka/data/difficulty.dart';
 
 class PrepStep {
   int id; // also the step number
+  String title;
   String description;
   String? image;
-  int? time; 
+  int? time;
   Difficulty? difficulty;
 
   PrepStep({
     required this.id,
+    required this.title,
     required this.description,
     this.image,
     this.time,

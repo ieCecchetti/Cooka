@@ -1,20 +1,18 @@
 class Ingredient {
   final String id;
   final String name;
-  final double quantity;
-  final String unit;
+  final String? description;
   final String imageUrl;
 
   Ingredient({
     required this.id,
     required this.name,
-    required this.quantity,
-    required this.unit,
+    this.description,
     required this.imageUrl,
   });
 
   @override
   String toString() {
-    return '[$id] $quantity $unit of $name';
+    return '[$id]: $name';
   }
 }

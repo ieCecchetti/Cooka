@@ -38,6 +38,7 @@ dependencies:
   flutter_riverpod: ^2.6.1
   font_awesome_flutter: ^10.8.0
   flutter_breadcrumb: ^1.0.1
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

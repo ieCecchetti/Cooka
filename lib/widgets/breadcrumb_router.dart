@@ -7,11 +7,8 @@ class BreadcrumbRouter extends ConsumerStatefulWidget {
   final List<String> allItems; // All breadcrumb items
   final Map<String, Widget Function(BuildContext)> routes; // Routes map
 
-  const BreadcrumbRouter({
-    Key? key,
-    required this.allItems,
-    required this.routes,
-  }) : super(key: key);
+  const BreadcrumbRouter(
+      {super.key, required this.allItems, required this.routes});
 
   @override
   ConsumerState<BreadcrumbRouter> createState() => _BreadcrumbRouterState();
@@ -23,8 +20,13 @@ class _BreadcrumbRouterState extends ConsumerState<BreadcrumbRouter> {
   @override
   void initState() {
     super.initState();
-    currentRoute = widget.allItems.first; // Start with the first breadcrumb
-    ref.read(breadcrumbProvider.notifier).setActiveBreadcrumb(currentRoute);
+    // Start with the first breadcrumb. The order is important
+    currentRoute = widget.allItems.first;
+
+    // Delay the provider update until after the widget tree is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(breadcrumbProvider.notifier).setActiveBreadcrumb(currentRoute);
+    });
   }
 
   void navigateTo(String route) {
@@ -48,7 +50,8 @@ class _BreadcrumbRouterState extends ConsumerState<BreadcrumbRouter> {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(top: 16.0, bottom: 40.0, left: 12.0, right: 12.0),
+      padding: const EdgeInsets.only(
+          top: 8.0, bottom: 40.0, left: 12.0, right: 12.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -56,7 +59,10 @@ class _BreadcrumbRouterState extends ConsumerState<BreadcrumbRouter> {
           Expanded(
             child: BreadcrumbNavigator(
               allItems: widget.allItems,
-              child: widget.routes[currentRoute]!(context),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: widget.routes[currentRoute]!(context),
+              ),
             ),
           ),
           const SizedBox(height: 16),
@@ -81,7 +87,8 @@ class _BreadcrumbRouterState extends ConsumerState<BreadcrumbRouter> {
                     ? () => navigateTo(widget.allItems[currentIndex + 1])
                     : () {
                         // Handle Finish action
-                        Navigator.pop(context); // Example: Go back to the previous screen
+                        Navigator.pop(
+                            context); // Example: Go back to the previous screen
                       },
                 child: Text(
                   currentIndex < widget.allItems.length - 1
