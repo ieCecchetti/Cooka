@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 
 import 'package:cooka/screens/opening_screen.dart';
-import 'package:cooka/widgets/breadcrumb_navigator.dart';
 
 final theme = ThemeData(
   useMaterial3: true,

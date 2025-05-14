@@ -8,10 +8,10 @@ class BreadcrumbNavigator extends ConsumerWidget {
   final List<String> allItems; // All breadcrumb items
 
   const BreadcrumbNavigator({
-    Key? key,
+    super.key,
     required this.child,
     required this.allItems,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

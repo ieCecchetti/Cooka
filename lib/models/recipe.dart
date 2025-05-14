@@ -1,5 +1,4 @@
 import 'package:cooka/models/ingredient.dart';
-import 'package:cooka/models/measured_ingredient.dart';
 import 'package:cooka/models/prep_step.dart';
 import 'package:cooka/models/meal_category.dart';
 import 'package:cooka/data/difficulty.dart';
