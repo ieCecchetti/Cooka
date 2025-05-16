@@ -1,18 +1,18 @@
 import 'package:cooka/models/ingredient_units.dart';
 
 class MeasuredIngredient {
-  final String ingredient;
+  final String ingredientId;
   final double quantity;
   final IngredientUnit unit;
 
   MeasuredIngredient({
-    required this.ingredient,
+    required this.ingredientId,
     required this.quantity,
     required this.unit,
   });
 
   @override
   String toString() {
-    return '$quantity $unit of $ingredient';
+    return '$quantity $unit of $ingredientId';
   }
 }

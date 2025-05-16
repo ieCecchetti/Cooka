@@ -1,20 +1,27 @@
 import 'dart:io';
 
+import 'package:cooka/models/recipe.dart';
+import 'package:cooka/utils/backend.dart';
+import 'package:cooka/widgets/breadcrumb/breadcrumb_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:cooka/providers/breadcrum_provider.dart';
 import 'package:cooka/data/difficulty.dart';
 import 'package:cooka/models/prep_step.dart';
 
-class AddStepsPage extends ConsumerStatefulWidget {
-  const AddStepsPage({Key? key}) : super(key: key);
+import 'package:cooka/providers/breadcrum_provider.dart';
+import 'package:cooka/providers/create_recipe_provider.dart';
+import 'package:cooka/providers/recipe_provider.dart';
+
+class AddStepsPage extends BreadCrumbPage<CreateRecipeNotifier, Recipe> {
+  const AddStepsPage({super.key, required super.objectProvider});
 
   @override
   ConsumerState<AddStepsPage> createState() => _AddStepsPageState();
 }
 
-class _AddStepsPageState extends ConsumerState<AddStepsPage> {
+class _AddStepsPageState
+    extends BreadCrumbPageState<AddStepsPage, CreateRecipeNotifier, Recipe> {
   final List<PrepStep> steps = [];
   final ImagePicker _picker = ImagePicker();
 
@@ -31,20 +38,19 @@ class _AddStepsPageState extends ConsumerState<AddStepsPage> {
     final TextEditingController descriptionController = TextEditingController();
     final TextEditingController timeController = TextEditingController();
     Difficulty difficulty = Difficulty.easy;
-    File? selectedImage;
+    String? imageUrl; // Store the uploaded image URL
 
     final newStep = await showDialog<PrepStep>(
       context: context,
       builder: (context) {
         return Dialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0), // Rounded corners
+            borderRadius: BorderRadius.circular(16.0),
           ),
           child: LayoutBuilder(
             builder: (context, constraints) {
               return Container(
-                width: MediaQuery.of(context).size.width *
-                    0.9, // 90% of screen width
+                width: MediaQuery.of(context).size.width * 0.9,
                 padding: const EdgeInsets.symmetric(
                     horizontal: 24.0, vertical: 16.0),
                 child: StatefulBuilder(
@@ -128,10 +134,10 @@ class _AddStepsPageState extends ConsumerState<AddStepsPage> {
                           ),
                           const SizedBox(height: 16),
                           // Image Picker
-                          if (selectedImage != null)
+                          if (imageUrl != null)
                             Center(
-                              child: Image.file(
-                                selectedImage!,
+                              child: Image.network(
+                                imageUrl!,
                                 height: 150,
                                 width: 150,
                                 fit: BoxFit.cover,
@@ -152,9 +158,17 @@ class _AddStepsPageState extends ConsumerState<AddStepsPage> {
                                   source: ImageSource.gallery,
                                 );
                                 if (pickedFile != null) {
-                                  setState(() {
-                                    selectedImage = File(pickedFile.path);
-                                  });
+                                  // Instantly upload and get the network URL
+                                  final uploadedUrl =
+                                      await uploadImageToBackend(
+                                    File(pickedFile.path),
+                                    'https://your-backend.com/upload',
+                                  );
+                                  if (uploadedUrl.isNotEmpty) {
+                                    setState(() {
+                                      imageUrl = uploadedUrl;
+                                    });
+                                  }
                                 }
                               },
                               icon: const Icon(Icons.image),
@@ -181,7 +195,7 @@ class _AddStepsPageState extends ConsumerState<AddStepsPage> {
                                   return;
                                 }
 
-                                // Create the new step
+                                // Create the new step with the network image URL
                                 final newStep = PrepStep(
                                   id: steps.length + 1,
                                   title: titleController.text.trim(),
@@ -190,10 +204,9 @@ class _AddStepsPageState extends ConsumerState<AddStepsPage> {
                                   time:
                                       int.tryParse(timeController.text.trim()),
                                   difficulty: difficulty,
-                                  image: selectedImage?.path,
+                                  image: imageUrl, // Store the network URL
                                 );
 
-                                // Return the new step to the parent widget
                                 Navigator.of(context).pop(newStep);
                               },
                               icon: const Icon(Icons.save),
@@ -218,6 +231,40 @@ class _AddStepsPageState extends ConsumerState<AddStepsPage> {
         steps.add(newStep);
       });
     }
+  }
+
+  @override
+  Future<void> update(WidgetRef ref) async {
+    print("Saving steps...");
+    final notifier = ref.read(widget.objectProvider.notifier);
+    // Save the updated steps with image URLs to the provider
+    notifier.updateSteps(steps);
+  }
+
+  @override
+  Future<bool> validate(WidgetRef ref) async {
+    if (steps.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please add at least one step')),
+      );
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  Future<void> save(WidgetRef ref) async {
+    print("Saving and adding recipe to dummy list...");
+
+    // Add the recipe to the dummy list
+    final recipe =
+        ref.read(widget.objectProvider); // Retrieve the recipe object
+    ref.read(recipesProvider.notifier).addRecipe(recipe);
+    ref.read(createRecipesProvider.notifier).resetRecipe();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Recipe stored successfully!')),
+    );
   }
 
   @override
@@ -285,10 +332,15 @@ class _AddStepsPageState extends ConsumerState<AddStepsPage> {
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Image.file(
-                                        File(step.image!),
-                                        fit: BoxFit.cover,
-                                      ),
+                                      step.image!.startsWith('http')
+                                          ? Image.network(
+                                              step.image!,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.file(
+                                              File(step.image!),
+                                              fit: BoxFit.cover,
+                                            ),
                                       TextButton(
                                         onPressed: () {
                                           Navigator.of(context).pop();
@@ -301,11 +353,18 @@ class _AddStepsPageState extends ConsumerState<AddStepsPage> {
                               },
                             );
                           },
-                          child: Image.file(
-                            File(step.image!),
+                          child: SizedBox(
                             height: 50,
                             width: 50,
-                            fit: BoxFit.cover,
+                            child: step.image!.startsWith('http')
+                                ? Image.network(
+                                    step.image!,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.file(
+                                    File(step.image!),
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                         )
                       : const Icon(Icons.image),

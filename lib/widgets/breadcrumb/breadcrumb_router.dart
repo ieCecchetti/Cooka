@@ -1,11 +1,12 @@
+import 'package:cooka/widgets/breadcrumb/breadcrumb_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cooka/providers/breadcrum_provider.dart';
-import 'package:cooka/widgets/breadcrumb_navigator.dart';
+import 'package:cooka/widgets/breadcrumb/breadcrumb_navigator.dart';
 
 class BreadcrumbRouter extends ConsumerStatefulWidget {
   final List<String> allItems; // All breadcrumb items
-  final Map<String, Widget Function(BuildContext)> routes; // Routes map
+  final Map<String, BreadCrumbPage Function(BuildContext)> routes; // Routes map
 
   const BreadcrumbRouter(
       {super.key, required this.allItems, required this.routes});
@@ -16,26 +17,51 @@ class BreadcrumbRouter extends ConsumerStatefulWidget {
 
 class _BreadcrumbRouterState extends ConsumerState<BreadcrumbRouter> {
   late String currentRoute; // Track the current route
+  late final Map<String, BreadCrumbPage> builtPages;
 
   @override
   void initState() {
     super.initState();
-    // Start with the first breadcrumb. The order is important
     currentRoute = widget.allItems.first;
 
-    // Delay the provider update until after the widget tree is built
+    builtPages = {
+      for (final entry in widget.routes.entries)
+        entry.key: entry.value(context),
+    };
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(breadcrumbProvider.notifier).setActiveBreadcrumb(currentRoute);
     });
   }
 
-  void navigateTo(String route) {
-    if (widget.allItems.contains(route)) {
-      setState(() {
-        currentRoute = route;
-        ref.read(breadcrumbProvider.notifier).setActiveBreadcrumb(route);
-      });
+  void navigateTo(String route, {required bool goFarward}) async {
+    if (!widget.allItems.contains(route)) return;
+
+    final currentPage = builtPages[currentRoute]!;
+    final state = currentPage.key is GlobalKey<BreadCrumbPageState>
+        ? (currentPage.key as GlobalKey<BreadCrumbPageState>).currentState
+        : null;
+
+    if (state != null) {
+      if (goFarward) {
+        final isValid = await state.validate(ref);
+        if (!isValid) return;
+      }
+
+      final isLast = currentRoute == widget.allItems.last;
+      await state.update(ref);
+      if (isLast) {
+        await state.save(ref);
+        // Pop the screen after saving
+        if (mounted) Navigator.pop(context);
+        return; // Don't change route after finishing
+      }
     }
+
+    setState(() {
+      currentRoute = route;
+      ref.read(breadcrumbProvider.notifier).setActiveBreadcrumb(route);
+    });
   }
 
   @override
@@ -61,7 +87,7 @@ class _BreadcrumbRouterState extends ConsumerState<BreadcrumbRouter> {
               allItems: widget.allItems,
               child: Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: widget.routes[currentRoute]!(context),
+                child: builtPages[currentRoute]!,
               ),
             ),
           ),
@@ -73,7 +99,8 @@ class _BreadcrumbRouterState extends ConsumerState<BreadcrumbRouter> {
               // Previous Button
               ElevatedButton(
                 onPressed: currentIndex > 0
-                    ? () => navigateTo(widget.allItems[currentIndex - 1])
+                    ? () => navigateTo(widget.allItems[currentIndex - 1],
+                        goFarward: false)
                     : null, // Disable if on the first page
                 child: Text(
                   currentIndex > 0
@@ -84,12 +111,9 @@ class _BreadcrumbRouterState extends ConsumerState<BreadcrumbRouter> {
               // Next or Finish Button
               ElevatedButton(
                 onPressed: currentIndex < widget.allItems.length - 1
-                    ? () => navigateTo(widget.allItems[currentIndex + 1])
-                    : () {
-                        // Handle Finish action
-                        Navigator.pop(
-                            context); // Example: Go back to the previous screen
-                      },
+                    ? () => navigateTo(widget.allItems[currentIndex + 1],
+                        goFarward: true)
+                    : () => navigateTo(currentRoute, goFarward: true),
                 child: Text(
                   currentIndex < widget.allItems.length - 1
                       ? "Next: ${widget.allItems[currentIndex + 1]}"

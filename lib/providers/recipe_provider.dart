@@ -11,6 +11,7 @@ class RecipeNotifier extends StateNotifier<List<Recipe>> {
 
   /// Initialize transactions from the database
   Future<void> _initializeTransactions() async {
+    print("Initializing transactions");
     // TODO : Implement the logic to fetch recipes from the database
     final recipes = recipeList; // Replace with actual database fetching logic
     state = recipes;
@@ -18,8 +19,6 @@ class RecipeNotifier extends StateNotifier<List<Recipe>> {
 
   // Add a new transaction
   void addRecipe(Recipe transaction) async {
-    // Insert into the database
-    // await _dbHelper.insert('financial_record', transaction.toMap());
     state = [...state, transaction];
   }
 
@@ -27,6 +26,7 @@ class RecipeNotifier extends StateNotifier<List<Recipe>> {
   void removeRecipe(Recipe transaction) async {
     // Remove from the database
     // await _dbHelper.delete('financial_record', transaction.id);
+    recipeList.remove(transaction);
     state = state.where((element) => element.id != transaction.id).toList();
   }
 
@@ -35,6 +35,8 @@ class RecipeNotifier extends StateNotifier<List<Recipe>> {
     // Update the transaction in the database
     // await _dbHelper.update('financial_record', transaction.toMap());
     // Update the transaction in the state
+    recipeList[recipeList
+        .indexWhere((element) => element.id == transaction.id)] = transaction;
     state = state.map((item) => item.id == transaction.id ? transaction : item).toList();
   }
 
@@ -56,11 +58,11 @@ final recipesProvider =
 
 
 // Holds search query string
-final searchQueryProvider = StateProvider<String>((ref) => '');
+final searchRecipeQueryProvider = StateProvider<String>((ref) => '');
 
 // Filters recipes based on search query
 final filteredRecipesProvider = Provider<List<Recipe>>((ref) {
-  final query = ref.watch(searchQueryProvider).toLowerCase();
+  final query = ref.watch(searchRecipeQueryProvider).toLowerCase();
   final recipes = ref.watch(recipesProvider);
 
   if (query.isEmpty) return recipes;

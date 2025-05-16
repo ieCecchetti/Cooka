@@ -1,17 +1,29 @@
+import 'package:cooka/models/recipe.dart';
+import 'package:cooka/providers/create_recipe_provider.dart';
+import 'package:cooka/widgets/breadcrumb/breadcrumb_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cooka/providers/category_provider.dart';
 
 
-class AddCategoriesPage extends ConsumerStatefulWidget {
-  const AddCategoriesPage({super.key});
+class AddCategoriesPage extends BreadCrumbPage<CreateRecipeNotifier, Recipe> {
+  const AddCategoriesPage({super.key, required super.objectProvider});
 
   @override
-  ConsumerState<AddCategoriesPage> createState() => _AddIngredientsPageState();
+  ConsumerState<AddCategoriesPage> createState() => _AddCategoriesPageState();
 }
 
-class _AddIngredientsPageState extends ConsumerState<AddCategoriesPage> {
+class _AddCategoriesPageState
+    extends BreadCrumbPageState<AddCategoriesPage, CreateRecipeNotifier, Recipe> {
   final List<String> selectedCategories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final recipe = ref.read(widget.objectProvider);
+
+    selectedCategories.addAll(recipe.category.map((cat) => cat.title));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,5 +77,35 @@ class _AddIngredientsPageState extends ConsumerState<AddCategoriesPage> {
       ),
     );
   }
+
+  @override
+  Future<bool> validate(WidgetRef ref) async {
+    if (selectedCategories.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please add at least one category')),
+      );
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  Future<void> update(WidgetRef ref) async {
+    print("Saving categories...");
+    final notifier = ref.read(widget.objectProvider.notifier);
+
+    // Get all MealCategory objects from the provider
+    final allCategories = ref.read(categoriesProvider);
+
+    // Map selected category titles to MealCategory objects
+    final selectedMealCategories = allCategories
+        .where((cat) => selectedCategories.contains(cat.title))
+        .toList();
+    
+    print("Selected meal categories: $selectedMealCategories");
+
+    notifier.updateCategories(selectedMealCategories);
+  }
+
 }
 

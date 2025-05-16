@@ -91,7 +91,7 @@ final List<Ingredient> dummyIngredients = [
       id: '4',
       name: 'Sugar',
       imageUrl:
-          'https://www.tasteofhome.com/wp-content/uploads/2019/11/sugar-shutterstock_615908132.jpg'),
+          'https://media.istockphoto.com/id/1371245517/photo/granulated-white-sugar-in-wooden-bowl-isolated-on-white-background-with-clipping-path.jpg?s=612x612&w=0&k=20&c=fdfohHyZbusyq_67gMgIRbubn5hMZEw4KyhX3_dsh6E='),
   Ingredient(
       id: '5',
       name: 'Arborio rice',
@@ -177,32 +177,34 @@ final recipeList = [
     category: [dummyCategories[4]],
     name: 'Pancakes',
     description: 'Fluffy pancakes for breakfast',
-    imageUrl:
-        'https://d2sj0xby2hzqoy.cloudfront.net/kenwood_italy/attachments/data/000/008/235/original/pancake-americani.JPG',
-    ingredients: [
-      dummyIngredients[0], // Eggs
-      dummyIngredients[1], // Milk
-      dummyIngredients[2], // Flour
-      dummyIngredients[3], // Sugar
+    imagesUrl:
+        [
+      'https://d2sj0xby2hzqoy.cloudfront.net/kenwood_italy/attachments/data/000/008/235/original/pancake-americani.JPG'
+    ],
+    ingredientIds: [
+      dummyIngredients[0].id, // Eggs
+      dummyIngredients[1].id, // Milk
+      dummyIngredients[2].id, // Flour
+      dummyIngredients[3].id, // Sugar
     ],
     measuredIngredients: {
       '1': MeasuredIngredient(
-        ingredient: dummyIngredients[0].id,
+        ingredientId: dummyIngredients[0].id,
         quantity: 2,
         unit: IngredientUnit.pieces,
       ),
       '2': MeasuredIngredient(
-        ingredient: dummyIngredients[1].id,
+        ingredientId: dummyIngredients[1].id,
         quantity: 100,
         unit: IngredientUnit.milliliters,
       ),
       '3': MeasuredIngredient(
-        ingredient: dummyIngredients[2].id,
+        ingredientId: dummyIngredients[2].id,
         quantity: 2,
         unit: IngredientUnit.cups,
       ),
       '4': MeasuredIngredient(
-        ingredient: dummyIngredients[3].id,
+        ingredientId: dummyIngredients[3].id,
         quantity: 1,
         unit: IngredientUnit.cups,
       ),
@@ -230,14 +232,16 @@ final recipeList = [
     category: [dummyCategories[0]],
     name: 'Grilled Salmon',
     description: 'Healthy grilled salmon with lemon',
-    imageUrl:
-        'https://www.giallozafferano.it/images/10-1041/Salmone-grigliato-con-salsa-al-prezzemolo_780x520_wm.jpg',
-    ingredients: [
-      dummyIngredients[14], // Olive oil
+    imagesUrl:
+        [
+      'https://www.giallozafferano.it/images/10-1041/Salmone-grigliato-con-salsa-al-prezzemolo_780x520_wm.jpg'
+    ],
+    ingredientIds: [
+      dummyIngredients[14].id, // Olive oil
     ],
     measuredIngredients: {
       '14': MeasuredIngredient(
-        ingredient: dummyIngredients[14].id,
+        ingredientId: dummyIngredients[14].id,
         quantity: 1,
         unit: IngredientUnit.tablespoons,
       ),
@@ -265,44 +269,46 @@ final recipeList = [
     category: [dummyCategories[2]],
     name: 'Risotto allo Zafferano',
     description: 'Classic Italian saffron risotto',
-    imageUrl:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-8-7N-De4Arg9552Zer1dyiBCzSZeN-hRGQ&s',
-    ingredients: [
-      dummyIngredients[4], // Arborio rice
-      dummyIngredients[5], // Saffron threads
-      dummyIngredients[6], // Chicken broth
-      dummyIngredients[7], // Parmesan cheese
-      dummyIngredients[8], // Butter
-      dummyIngredients[9], // Onion
+    imagesUrl:
+        [
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-8-7N-De4Arg9552Zer1dyiBCzSZeN-hRGQ&s'
+    ],
+    ingredientIds: [
+      dummyIngredients[4].id, // Arborio rice
+      dummyIngredients[5].id, // Saffron threads
+      dummyIngredients[6].id, // Chicken broth
+      dummyIngredients[7].id, // Parmesan cheese
+      dummyIngredients[8].id, // Butter
+      dummyIngredients[9].id, // Onion
     ],
     measuredIngredients: {
       '4': MeasuredIngredient(
-        ingredient: dummyIngredients[4].id,
+        ingredientId: dummyIngredients[4].id,
         quantity: 1,
         unit: IngredientUnit.cups,
       ),
       '5': MeasuredIngredient(
-        ingredient: dummyIngredients[5].id,
+        ingredientId: dummyIngredients[5].id,
         quantity: 1,
         unit: IngredientUnit.pinch,
       ),
       '6': MeasuredIngredient(
-        ingredient: dummyIngredients[6].id,
+        ingredientId: dummyIngredients[6].id,
         quantity: 4,
         unit: IngredientUnit.cups,
       ),
       '7': MeasuredIngredient(
-        ingredient: dummyIngredients[7].id,
+        ingredientId: dummyIngredients[7].id,
         quantity: 0.5,
         unit: IngredientUnit.cups,
       ),
       '8': MeasuredIngredient(
-        ingredient: dummyIngredients[8].id,
+        ingredientId: dummyIngredients[8].id,
         quantity: 2,
         unit: IngredientUnit.tablespoons,
       ),
       '9': MeasuredIngredient(
-        ingredient: dummyIngredients[9].id,
+        ingredientId: dummyIngredients[9].id,
         quantity: 1,
         unit: IngredientUnit.unit,
       ),
@@ -364,20 +370,22 @@ final friendReceipts = [
     name: 'Spaghetti Carbonara',
     description:
         'Classic Spaghetti Carbonara dish made with eggs, cheese, pancetta, and pepper.',
-    imageUrl:
-        'https://www.informacibo.it/wp-content/uploads/2018/04/carbonara.jpg',
-    ingredients: [
-      dummyIngredients[0], // Eggs
-      dummyIngredients[7], // Parmesan cheese
+    imagesUrl:
+        [
+      'https://www.informacibo.it/wp-content/uploads/2018/04/carbonara.jpg'
+    ],
+    ingredientIds: [
+      dummyIngredients[0].id, // Eggs
+      dummyIngredients[7].id, // Parmesan cheese
     ],
     measuredIngredients: {
       '0': MeasuredIngredient(
-        ingredient: dummyIngredients[0].id,
+        ingredientId: dummyIngredients[0].id,
         quantity: 2,
         unit: IngredientUnit.pieces,
       ),
       '7': MeasuredIngredient(
-        ingredient: dummyIngredients[7].id,
+        ingredientId: dummyIngredients[7].id,
         quantity: 0.5,
         unit: IngredientUnit.cups,
       ),
@@ -415,38 +423,40 @@ final friendReceipts = [
     category: [dummyCategories[7]],
     name: 'Margherita Pizza',
     description: 'Classic Italian pizza with tomato, mozzarella, and basil',
-    imageUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg/800px-Eq_it-na_pizza-margherita_sep2005_sml.jpg',
-    ingredients: [
-      dummyIngredients[10], // Pizza dough
-      dummyIngredients[11], // Tomato sauce
-      dummyIngredients[12], // Mozzarella cheese
-      dummyIngredients[13], // Fresh basil leaves
-      dummyIngredients[14], // Olive oil
+    imagesUrl:
+        [
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg/800px-Eq_it-na_pizza-margherita_sep2005_sml.jpg'
+    ],
+    ingredientIds: [
+      dummyIngredients[10].id, // Pizza dough
+      dummyIngredients[11].id, // Tomato sauce
+      dummyIngredients[12].id, // Mozzarella cheese
+      dummyIngredients[13].id, // Fresh basil leaves
+      dummyIngredients[14].id, // Olive oil
     ],
     measuredIngredients: {
       '10': MeasuredIngredient(
-        ingredient: dummyIngredients[10].id,
+        ingredientId: dummyIngredients[10].id,
         quantity: 1,
         unit: IngredientUnit.unit,
       ),
       '11': MeasuredIngredient(
-        ingredient: dummyIngredients[11].id,
+        ingredientId: dummyIngredients[11].id,
         quantity: 0.5,
         unit: IngredientUnit.cups,
       ),
       '12': MeasuredIngredient(
-        ingredient: dummyIngredients[12].id,
+        ingredientId: dummyIngredients[12].id,
         quantity: 1,
         unit: IngredientUnit.cups,
       ),
       '13': MeasuredIngredient(
-        ingredient: dummyIngredients[13].id,
+        ingredientId: dummyIngredients[13].id,
         quantity: 5,
         unit: IngredientUnit.pieces,
       ),
       '14': MeasuredIngredient(
-        ingredient: dummyIngredients[14].id,
+        ingredientId: dummyIngredients[14].id,
         quantity: 1,
         unit: IngredientUnit.tablespoons,
       ),

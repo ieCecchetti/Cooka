@@ -46,11 +46,11 @@ final categoriesProvider =
 
 
 // Holds search query string
-final searchQueryProvider = StateProvider<String>((ref) => '');
+final searchCategoryQueryProvider = StateProvider<String>((ref) => '');
 
 // Filters recipes based on search query
 final filteredCategoriesProvider = Provider<List<MealCategory>>((ref) {
-  final query = ref.watch(searchQueryProvider).toLowerCase();
+  final query = ref.watch(searchCategoryQueryProvider).toLowerCase();
   final categories = ref.watch(categoriesProvider);
 
   if (query.isEmpty) return categories;

@@ -1,7 +1,9 @@
+import 'package:cooka/models/ingredient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:cooka/providers/recipe_provider.dart';
+import 'package:cooka/providers/ingredient_provider.dart';
 
 import 'package:cooka/widgets/recipe_list.dart';
 import 'package:cooka/widgets/horizontal_list.dart';
@@ -35,6 +37,7 @@ class _MainViewScreenState extends ConsumerState<MainViewScreen> {
   @override
   Widget build(BuildContext context) {
     final recipeList = ref.watch(filteredRecipesProvider);
+    final ingredientList = ref.watch(ingredientsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -90,7 +93,7 @@ class _MainViewScreenState extends ConsumerState<MainViewScreen> {
                   fillColor: Colors.grey[200],
                 ),
                 onChanged: (value) {
-                  ref.read(searchQueryProvider.notifier).state = value;
+                  ref.read(searchRecipeQueryProvider.notifier).state = value;
                 },
               ),
               const SizedBox(height: 20),
@@ -103,8 +106,7 @@ class _MainViewScreenState extends ConsumerState<MainViewScreen> {
               ),
               const SizedBox(height: 20),
               HorizontalList(
-                ingredients:
-                    recipeList.expand((recipe) => recipe.ingredients).toList(),
+                ingredients: ingredientList,
                 title: 'Ingredients',
                 showTitle: true,
               ),

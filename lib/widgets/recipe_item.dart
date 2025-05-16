@@ -12,7 +12,7 @@ class RecipeItem extends StatelessWidget {
       leading: Stack(
       children: [
         Image.network(
-          recipe.imageUrl,
+            recipe.imagesUrl.first,
           width: 100,
           height: 200,
           fit: BoxFit.fitWidth,

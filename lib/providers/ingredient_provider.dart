@@ -56,11 +56,11 @@ final ingredientsProvider =
 
 
 // Holds search query string
-final searchQueryProvider = StateProvider<String>((ref) => '');
+final searchIngredientQueryProvider = StateProvider<String>((ref) => '');
 
 // Filters recipes based on search query
 final filteredIngredientProvider = Provider<List<Ingredient>>((ref) {
-  final query = ref.watch(searchQueryProvider).toLowerCase();
+  final query = ref.watch(searchIngredientQueryProvider).toLowerCase();
   final ingredients = ref.watch(ingredientsProvider);
 
   if (query.isEmpty) return ingredients;

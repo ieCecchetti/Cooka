@@ -1,22 +1,42 @@
 import 'package:cooka/screens/create_recipe/add_categories.dart';
+import 'package:cooka/widgets/breadcrumb/breadcrumb_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cooka/screens/create_recipe/add_information.dart';
 import 'package:cooka/screens/create_recipe/add_ingredients.dart';
 import 'package:cooka/screens/create_recipe/add_steps.dart';
-import 'package:cooka/widgets/breadcrumb_router.dart';
+import 'package:cooka/widgets/breadcrumb/breadcrumb_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cooka/providers/create_recipe_provider.dart';
 
-class CreateRecipeScreen extends StatelessWidget {
-  const CreateRecipeScreen({Key? key}) : super(key: key);
+class CreateRecipeScreen extends ConsumerWidget {
+  const CreateRecipeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Define the routes in order of breadcrumb navigation
-    // You can also use a Map<String, WidgetBuilder> if you prefer
+  Widget build(BuildContext context, WidgetRef ref) {
+    final Map<String, GlobalKey<BreadCrumbPageState>> _pageKeys = {
+      'Information': GlobalKey<BreadCrumbPageState>(),
+      'Categories': GlobalKey<BreadCrumbPageState>(),
+      'Ingredients': GlobalKey<BreadCrumbPageState>(),
+      'Steps': GlobalKey<BreadCrumbPageState>(),
+    };
+
     final routes = {
-      'Information': (context) => const AddInformationPage(),
-      'Categories': (context) => const AddCategoriesPage(),
-      'Ingredients': (context) => const AddIngredientsPage(),
-      'Steps': (context) => const AddStepsPage(),
+      'Information': (context) => AddInformationPage(
+            key: _pageKeys['Information'],
+            objectProvider: createRecipesProvider,
+          ),
+      'Categories': (context) => AddCategoriesPage(
+            key: _pageKeys['Categories'],
+            objectProvider: createRecipesProvider,
+          ),
+      'Ingredients': (context) => AddIngredientsPage(
+            key: _pageKeys['Ingredients'],
+            objectProvider: createRecipesProvider,
+          ),
+      'Steps': (context) => AddStepsPage(
+            key: _pageKeys['Steps'],
+            objectProvider: createRecipesProvider,
+          ),
     };
 
     return Scaffold(
@@ -25,9 +45,8 @@ class CreateRecipeScreen extends StatelessWidget {
       ),
       body: BreadcrumbRouter(
         allItems: routes.keys.toList(),
-        routes: routes
+        routes: routes,
       ),
     );
   }
 }
-

@@ -1,5 +1,9 @@
 import 'package:cooka/models/ingredient_units.dart';
 import 'package:cooka/models/measured_ingredient.dart';
+import 'package:cooka/models/recipe.dart';
+import 'package:cooka/providers/create_recipe_provider.dart';
+import 'package:cooka/utils/backend.dart';
+import 'package:cooka/widgets/breadcrumb/breadcrumb_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cooka/providers/ingredient_provider.dart';
@@ -7,19 +11,39 @@ import 'package:cooka/models/ingredient.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class AddIngredientsPage extends ConsumerStatefulWidget {
-  const AddIngredientsPage({super.key});
+class AddIngredientsPage extends BreadCrumbPage<CreateRecipeNotifier, Recipe> {
+  const AddIngredientsPage({super.key, required super.objectProvider});
 
   @override
   ConsumerState<AddIngredientsPage> createState() => _AddIngredientsPageState();
 }
 
-class _AddIngredientsPageState extends ConsumerState<AddIngredientsPage> {
+class _AddIngredientsPageState
+    extends BreadCrumbPageState<AddIngredientsPage,
+    CreateRecipeNotifier, Recipe> {
   final TextEditingController searchController = TextEditingController();
   final List<Ingredient> selectedIngredients = [];
   final List<MeasuredIngredient> measuredIngredients = [];
-  Ingredient? currentIngredient; // Track the ingredient being edited
+  Ingredient? currentIngredient;
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    final recipe = ref.read(widget.objectProvider);
+
+    // Get all ingredients from provider
+    final allIngredients = ref.read(ingredientsProvider);
+
+    // Initialize selectedIngredients from ids
+    selectedIngredients.addAll(
+      allIngredients
+          .where((ingredient) => recipe.ingredientIds.contains(ingredient.id)),
+    );
+
+    // Initialize measuredIngredients from map values
+    measuredIngredients.addAll(recipe.measuredIngredients.values);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +63,7 @@ class _AddIngredientsPageState extends ConsumerState<AddIngredientsPage> {
           TextField(
             controller: searchController,
             onChanged: (value) {
-              ref.read(searchQueryProvider.notifier).state = value;
+              ref.read(searchIngredientQueryProvider.notifier).state = value;
             },
             decoration: const InputDecoration(
               labelText: "Search Ingredients",
@@ -67,7 +91,8 @@ class _AddIngredientsPageState extends ConsumerState<AddIngredientsPage> {
                 }
 
                 final ingredient = filteredIngredients[index];
-                final isSelected = selectedIngredients.contains(ingredient);
+                final isSelected = measuredIngredients
+                    .any((measured) => measured.ingredientId == ingredient.id);
 
                 return ListTile(
                   title: Text(ingredient.name),
@@ -77,7 +102,10 @@ class _AddIngredientsPageState extends ConsumerState<AddIngredientsPage> {
                   onTap: () {
                     setState(() {
                       if (isSelected) {
-                        selectedIngredients.remove(ingredient);
+                        measuredIngredients.removeWhere((measured) =>
+                            measured.ingredientId == ingredient.id);
+                        selectedIngredients
+                            .removeWhere((ing) => ing.id == ingredient.id);
                       } else {
                         currentIngredient = ingredient;
                         _showIngredientDetailsDialog(context, ingredient);
@@ -90,7 +118,7 @@ class _AddIngredientsPageState extends ConsumerState<AddIngredientsPage> {
           ),
           const SizedBox(height: 16),
           // Selected Ingredients Summary
-          if (selectedIngredients.isNotEmpty)
+          if (measuredIngredients.isNotEmpty)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -102,14 +130,16 @@ class _AddIngredientsPageState extends ConsumerState<AddIngredientsPage> {
                 Wrap(
                   spacing: 8.0,
                   runSpacing: 8.0,
-                  children: selectedIngredients.map((ingredient) {
+                  children: measuredIngredients.map((measured) {
+                    final ingredient = selectedIngredients
+                        .firstWhere((ing) => ing.id == measured.ingredientId);
                     return Chip(
-                      label: Text(ingredient.name),
+                      label: Text("${ingredient.name}"),
                       onDeleted: () {
                         setState(() {
-                          measuredIngredients.removeWhere((measured) =>
-                              measured.ingredient == ingredient.id);
-                          selectedIngredients.remove(ingredient);
+                          measuredIngredients.remove(measured);
+                          selectedIngredients.removeWhere(
+                              (ing) => ing.id == measured.ingredientId);
                         });
                       },
                     );
@@ -180,7 +210,7 @@ class _AddIngredientsPageState extends ConsumerState<AddIngredientsPage> {
                     selectedIngredients.add(ingredient);
                     measuredIngredients.add(
                       MeasuredIngredient(
-                        ingredient: ingredient.id,
+                        ingredientId: ingredient.id,
                         quantity: double.tryParse(quantityController.text) ?? 0,
                         unit: selectedUnit!,
                       ),
@@ -202,8 +232,9 @@ class _AddIngredientsPageState extends ConsumerState<AddIngredientsPage> {
   }
 
   void _showAddNewIngredientDialog(BuildContext context) {
-    final TextEditingController nameController = TextEditingController();
-    File? selectedImage;
+    final TextEditingController nameController =
+        TextEditingController(text: searchController.text); // 1. Autocomplete
+    String? imageUrl; // 2. Store network URL
 
     showDialog(
       context: context,
@@ -216,44 +247,51 @@ class _AddIngredientsPageState extends ConsumerState<AddIngredientsPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                    labelText: "Ingredient Name",
-                    border: OutlineInputBorder(),
-                  ),
-                  ),
-                  const SizedBox(height: 16),
-                  if (selectedImage != null)
-                  Image.file(
-                    selectedImage!,
-                    height: 100,
-                    width: 100,
-                    fit: BoxFit.cover,
-                  )
-                  else
-                  const Text(
-                    "No image selected",
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  const SizedBox(height: 8),
-                  ElevatedButton.icon(
-                  onPressed: () async {
-                    final pickedFile = await _picker.pickImage(
-                    source: ImageSource.gallery,
-                    );
-                    if (pickedFile != null) {
-                    setState(() {
-                      selectedImage = File(pickedFile.path);
-                    });
-                    }
-                  },
-                  icon: const Icon(Icons.image),
-                  label: const Text("Pick Image"),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      labelText: "Ingredient Name",
+                      border: OutlineInputBorder(),
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  if (imageUrl != null)
+                    Image.network(
+                      imageUrl!,
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    )
+                  else
+                    const Text(
+                      "No image selected",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  const SizedBox(height: 8),
+                  ElevatedButton.icon(
+                    onPressed: () async {
+                      final pickedFile = await _picker.pickImage(
+                        source: ImageSource.gallery,
+                      );
+                      if (pickedFile != null) {
+                        // 2. Instantly upload and get the network URL
+                        final uploadedUrl = await uploadImageToBackend(
+                          File(pickedFile.path),
+                          'https://your-backend.com/upload',
+                        );
+                        if (uploadedUrl.isNotEmpty) {
+                          setState(() {
+                            imageUrl = uploadedUrl;
+                          });
+                        }
+                      }
+                    },
+                    icon: const Icon(Icons.image),
+                    label: const Text("Pick Image"),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
                   ),
                 ],
               );
@@ -267,16 +305,42 @@ class _AddIngredientsPageState extends ConsumerState<AddIngredientsPage> {
               child: const Text("Cancel"),
             ),
             TextButton(
-              onPressed: () {
-                setState(() {
-                  final newIngredient = Ingredient(
-                    id: DateTime.now().toString(), // Generate a unique ID
-                    name: nameController.text,
-                    imageUrl: selectedImage?.path ?? '',
+              onPressed: () async {
+                final name = nameController.text.trim();
+                if (name.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Please enter a name")),
                   );
-                  selectedIngredients.add(newIngredient);
-                });
-                Navigator.pop(context);
+                  return;
+                }
+
+                // Create the ingredient object with the network image URL
+                final newIngredient = Ingredient(
+                  id: DateTime.now().toString(),
+                  name: name,
+                  imageUrl: imageUrl ?? '',
+                );
+
+                // Insert using backend (adds to dummy if mock)
+                final insertedIngredient =
+                    await insertIngredientToBackend(newIngredient, mock: true);
+
+                // Update the search query to the new ingredient's name
+                ref.read(searchIngredientQueryProvider.notifier).state =
+                    insertedIngredient.name;
+
+                // Only add if not already present
+                if (!selectedIngredients
+                    .any((i) => i.id == insertedIngredient.id)) {
+                  setState(() {
+                    selectedIngredients.add(insertedIngredient);
+                  });
+                }
+
+                Navigator.pop(context); // Close the add dialog
+
+                // Immediately open the details dialog for quantity/unit
+                _showIngredientDetailsDialog(context, insertedIngredient);
               },
               child: const Text("Add"),
             ),
@@ -284,5 +348,27 @@ class _AddIngredientsPageState extends ConsumerState<AddIngredientsPage> {
         );
       },
     );
+  }
+
+  @override
+  Future<bool> validate(WidgetRef ref) async {
+    if (selectedIngredients.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please add at least one ingredient')),
+      );
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  Future<void> update(WidgetRef ref) async {
+    print("Saving ingredients...");
+    final notifier = ref.read(widget.objectProvider.notifier);
+
+    // Save the selected ingredient IDs and measured ingredients to the provider
+    notifier.updateIngredients(selectedIngredients.map((i) => i.id).toList());
+    notifier.updateMeasuredIngredients(
+        {for (var m in measuredIngredients) m.ingredientId: m});
   }
 }
