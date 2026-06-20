@@ -68,11 +68,21 @@ class HorizontalList extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.0),
                             color: Colors.grey[200],
-                            image: DecorationImage(
-                              image: NetworkImage(ingredient.imageUrl),
-                              fit: BoxFit.cover,
-                            ),
+                            image: ingredient.imageUrl.isNotEmpty
+                                ? DecorationImage(
+                                    image: NetworkImage(ingredient.imageUrl),
+                                    fit: BoxFit.cover,
+                                    onError: (_, __) {},
+                                  )
+                                : null,
                           ),
+                          child: ingredient.imageUrl.isEmpty
+                              ? const Icon(
+                                  Icons.fastfood,
+                                  size: 40,
+                                  color: Colors.grey,
+                                )
+                              : null,
                         ),
                       ),
                       const SizedBox(height: 4),

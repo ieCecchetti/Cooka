@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:cooka/data/image_urls.dart';
 import 'package:cooka/models/ingredient.dart';
-import 'package:cooka/data/dummy.dart'; // Make sure this import is present
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cooka/providers/ingredient_provider.dart';
 
 String getRandomImage() {
   // Assuming imageUrls is a list of URLs
@@ -41,12 +42,13 @@ Future<String> uploadImageToBackend(File file, String backendUrl,
 }
 
 Future<Ingredient> insertIngredientToBackend(
-  Ingredient ingredient, {
+  Ingredient ingredient,
+  WidgetRef ref, {
   bool mock = true,
 }) async {
   if (mock) {
-    // Add to dummyIngredients list
-    dummyIngredients.add(ingredient);
+    // Add to ingredients via provider
+    ref.read(ingredientsProvider.notifier).addIngredient(ingredient);
     return ingredient;
   }
 

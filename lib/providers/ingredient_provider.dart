@@ -1,6 +1,6 @@
 import 'package:cooka/models/ingredient.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cooka/data/dummy.dart';
+import 'package:cooka/data/ingredient_loader.dart';
 
 
 class IngredientNotifier extends StateNotifier<List<Ingredient>> {
@@ -12,7 +12,7 @@ class IngredientNotifier extends StateNotifier<List<Ingredient>> {
   /// Initialize transactions from the database
   Future<void> _initializeTransactions() async {
     // TODO : Implement the logic to fetch recipes from the database
-    final ingredients = dummyIngredients; // Replace with actual database fetching logic
+    final ingredients = await loadIngredientsFromJson();
     state = ingredients;
   }
 

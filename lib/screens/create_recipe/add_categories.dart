@@ -4,6 +4,7 @@ import 'package:cooka/widgets/breadcrumb/breadcrumb_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cooka/providers/category_provider.dart';
+import 'package:cooka/data/categorie.dart';
 
 
 class AddCategoriesPage extends BreadCrumbPage<CreateRecipeNotifier, Recipe> {
@@ -16,6 +17,7 @@ class AddCategoriesPage extends BreadCrumbPage<CreateRecipeNotifier, Recipe> {
 class _AddCategoriesPageState
     extends BreadCrumbPageState<AddCategoriesPage, CreateRecipeNotifier, Recipe> {
   final List<String> selectedCategories = [];
+  final Map<String, bool> _expandedMacroCategories = {};
 
   @override
   void initState() {
@@ -23,18 +25,21 @@ class _AddCategoriesPageState
     final recipe = ref.read(widget.objectProvider);
 
     selectedCategories.addAll(recipe.category.map((cat) => cat.title));
+    
+    // Initialize all macro categories as collapsed
+    for (var macro in dummyMacroCategories) {
+      _expandedMacroCategories[macro.id] = false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final categories = ref.watch(categoriesProvider).map((category) => category.title).toList();
-
     return Padding(
       padding: const EdgeInsets.all(8.0), 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title Row to prevent resizing due to the wrap widget
+          // Title Row
           Row(
             children: const [
               Text(
@@ -43,30 +48,84 @@ class _AddCategoriesPageState
               ),
             ],
           ),
-          const SizedBox(height: 16), // Ensure consistent spacing
+          const SizedBox(height: 16),
           Expanded(
             child: SingleChildScrollView(
-              child: Wrap(
-                spacing: 8.0, // Horizontal spacing between chips
-                runSpacing: 8.0, // Vertical spacing between rows of chips
-                children: categories.map((category) {
-                  final isSelected = selectedCategories.contains(category);
-                  return FilterChip(
-                    label: Text(category),
-                    selected: isSelected,
-                    onSelected: (selected) {
-                      setState(() {
-                        if (selected) {
-                          selectedCategories.add(category);
-                        } else {
-                          selectedCategories.remove(category);
-                        }
-                      });
-                    },
-                    selectedColor: Colors.blueAccent.withOpacity(0.2),
-                    backgroundColor: Colors.grey.withOpacity(0.2),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+              child: Column(
+                children: dummyMacroCategories.map((macroCategory) {
+                  final isExpanded =
+                      _expandedMacroCategories[macroCategory.id] ?? false;
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    child: ExpansionTile(
+                      leading: Text(
+                        macroCategory.emoji,
+                        style: const TextStyle(fontSize: 24),
+                      ),
+                      title: Text(
+                        macroCategory.title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      initiallyExpanded: isExpanded,
+                      onExpansionChanged: (expanded) {
+                        setState(() {
+                          _expandedMacroCategories[macroCategory.id] = expanded;
+                        });
+                      },
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        side: BorderSide.none,
+                      ),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Wrap(
+                            spacing: 8.0,
+                            runSpacing: 8.0,
+                            children: macroCategory.categories.map((category) {
+                              final isSelected =
+                                  selectedCategories.contains(category.title);
+                              return FilterChip(
+                                avatar: CircleAvatar(
+                                  backgroundColor:
+                                      category.color.withOpacity(0.2),
+                                  child: Icon(
+                                    category.icon,
+                                    size: 16,
+                                    color: category.color,
+                                  ),
+                                ),
+                                label: Text(category.title),
+                                selected: isSelected,
+                                onSelected: (selected) {
+                                  setState(() {
+                                    if (selected) {
+                                      selectedCategories.add(category.title);
+                                    } else {
+                                      selectedCategories.remove(category.title);
+                                    }
+                                  });
+                                },
+                                selectedColor: category.color.withOpacity(0.2),
+                                backgroundColor: Colors.grey.withOpacity(0.1),
+                                checkmarkColor: category.color,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  side: BorderSide(
+                                    color: isSelected
+                                        ? category.color
+                                        : Colors.transparent,
+                                    width: 1.5,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 }).toList(),

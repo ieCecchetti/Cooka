@@ -239,6 +239,14 @@ class _AddStepsPageState
     final notifier = ref.read(widget.objectProvider.notifier);
     // Save the updated steps with image URLs to the provider
     notifier.updateSteps(steps);
+    // Difficulty will be calculated based on the average of all steps
+    final averageDifficulty = steps.isNotEmpty
+        ? steps
+                .map((step) => step.difficulty?.index ?? 0)
+                .reduce((a, b) => a + b) /
+            steps.length
+        : 0;
+    notifier.updateDifficulty(Difficulty.values[averageDifficulty.round()]);
   }
 
   @override

@@ -1,6 +1,6 @@
 import 'package:cooka/models/meal_category.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cooka/data/dummy.dart';
+import 'package:cooka/data/categorie.dart';
 
 
 class CategoryNotifier extends StateNotifier<List<MealCategory>> {

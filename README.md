@@ -38,3 +38,70 @@ In case you are interested in more developing and in this case on installing new
 flutter pub add <package_name>
 ```
 
+## Categorie
+
+### 🍽️ Tipologia di piatti
+
+- Antipasti
+- Primi piatti
+- Secondi piatti
+- Contorni
+- Dolci
+- Snack & street food
+
+### 🌍 Cucine del mondo
+
+- Cucina italiana
+- Cucina francese
+- Cucina asiatica
+- Cucina mediterranea
+- Cucina americana
+- Cucina vegetariana / vegana
+
+### ⏱️ Tempo di preparazione
+
+- Ricette veloci (≤ 15 min)
+- Ricette facili
+- Ricette per tutti i giorni
+- Ricette elaborate
+
+### 🥗 Stili alimentari
+
+- Vegetariano
+- Vegano
+- Senza glutine
+- Senza lattosio
+- Low carb
+- Proteico
+
+### 🍳 Metodo di cottura
+
+- Al forno
+- In padella
+- A vapore
+- Alla griglia
+- Senza cottura
+
+### 🎯 Occasioni
+
+- Colazione
+- Pranzo
+- Cena
+- Aperitivo
+- Feste e ricorrenze
+- Meal prep
+
+### 👶👵 Target
+
+- Ricette per bambini
+- Ricette light
+- Ricette tradizionali
+- Ricette gourmet
+
+### ⭐ Extra utili
+
+- Ricette con pochi ingredienti
+- Ricette anti-spreco
+- Ricette di stagione
+- Ricette economiche
+
