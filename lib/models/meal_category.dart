@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cooka/data/icons.dart';
 
 class MealCategory {
@@ -40,8 +41,8 @@ class MealCategory {
     );
   }
 
-  // Get the IconData by rebuilding it from the code point and font family
-  IconData get icon {
+  // Get the FaIconData by rebuilding it from the code point and font family
+  FaIconData get icon {
     return getIconByCodePoint(iconCodePoint);
   }
 }

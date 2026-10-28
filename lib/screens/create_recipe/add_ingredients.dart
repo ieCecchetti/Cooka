@@ -323,7 +323,7 @@ class _AddIngredientsPageState
 
                 // Insert using backend (adds to dummy if mock)
                 final insertedIngredient =
-                    await insertIngredientToBackend(newIngredient, mock: true);
+                    await insertIngredientToBackend(newIngredient, ref, mock: true);
 
                 // Update the search query to the new ingredient's name
                 ref.read(searchIngredientQueryProvider.notifier).state =

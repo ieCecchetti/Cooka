@@ -2,6 +2,7 @@ import 'package:cooka/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cooka/data/constants.dart' as app;
+import 'package:cooka/theme/app_theme.dart';
 
 class OpeningScreen extends StatefulWidget {
   const OpeningScreen({super.key});
@@ -65,7 +66,7 @@ class _OpeningScreenState extends State<OpeningScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1), // Light subtle background
+      backgroundColor: AppColors.paper,
       body: Stack(
         children: [
           Center(
@@ -82,16 +83,21 @@ class _OpeningScreenState extends State<OpeningScreen>
                       child: Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          gradient: LinearGradient(
+                          gradient: const LinearGradient(
                             colors: [
-                              Theme.of(context).primaryColor.withOpacity(0.8), // Subtle green
-                              Theme.of(context)
-                                  .primaryColor
-                                  .withOpacity(0.2), // Subtle lime
+                              AppColors.accentSoft,
+                              AppColors.accent,
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x33000000),
+                              blurRadius: 16,
+                              offset: Offset(0, 8),
+                            ),
+                          ],
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -112,12 +118,7 @@ class _OpeningScreenState extends State<OpeningScreen>
                     opacity: _opacityAnimation,
                     child: Text(
                       app.appName,
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white.withOpacity(0.8), // Subtle white
-                        letterSpacing: 1.5,
-                      ),
+                      style: handwritten(fontSize: 56),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -125,10 +126,9 @@ class _OpeningScreenState extends State<OpeningScreen>
                     opacity: _opacityAnimation,
                     child: Text(
                       app.appDescription,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white70
-                            .withOpacity(0.8), // Subtle light text
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: AppColors.inkSoft,
                         fontStyle: FontStyle.italic,
                       ),
                       textAlign: TextAlign.center,
@@ -148,17 +148,10 @@ class _OpeningScreenState extends State<OpeningScreen>
               child: Text(
                 "created by LevelApp↑",
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white.withOpacity(0.7), // Subtle white
+                  color: AppColors.inkSoft.withValues(alpha: 0.8),
                   letterSpacing: 1.2,
-                  shadows: [
-                    Shadow(
-                      blurRadius: 5.0,
-                      color: Colors.black.withOpacity(0.5), // Subtle shadow
-                      offset: const Offset(2, 2),
-                    ),
-                  ],
                 ),
                 textAlign: TextAlign.center,
               ),

@@ -1,3 +1,4 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cooka/models/recipe.dart';
 import 'package:cooka/providers/create_recipe_provider.dart';
 import 'package:cooka/widgets/breadcrumb/breadcrumb_page.dart';
@@ -92,7 +93,7 @@ class _AddCategoriesPageState
                                 avatar: CircleAvatar(
                                   backgroundColor:
                                       category.color.withOpacity(0.2),
-                                  child: Icon(
+                                  child: FaIcon(
                                     category.icon,
                                     size: 16,
                                     color: category.color,

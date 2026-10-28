@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-final Map<String, IconData> mealCategoryIcons = {
+final Map<String, FaIconData> mealCategoryIcons = {
   "Breakfast": FontAwesomeIcons.egg,
   "Lunch": FontAwesomeIcons.burger,
   "Dinner": FontAwesomeIcons.utensils, 
@@ -77,8 +77,8 @@ final Map<String, IconData> mealCategoryIcons = {
 };
 
 
-/// Function to get IconData by integer (codePoint)
-IconData getIconByCodePoint(int iconCodePoint) {
+/// Function to get FaIconData by integer (codePoint)
+FaIconData getIconByCodePoint(int iconCodePoint) {
   for (var icon in mealCategoryIcons.values) {
     if (icon.codePoint == iconCodePoint) {
       return icon;

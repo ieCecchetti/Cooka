@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cooka/models/ingredient.dart';
+import 'package:cooka/theme/app_theme.dart';
 
 class HorizontalList extends StatelessWidget {
   final List<Ingredient> ingredients;
@@ -30,24 +31,14 @@ class HorizontalList extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor,
-                  ),
+                  style: handwritten(fontSize: 30),
                   textAlign: TextAlign.left,
                 ),
                 TextButton(
                   onPressed: () {
                     // Add your navigation or action logic here
                   },
-                  child: Text(
-                    'See Other',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: const Text('See Other'),
                 ),
               ],
             ),
@@ -58,43 +49,54 @@ class HorizontalList extends StatelessWidget {
                 itemCount: maxItems != null && (maxItems ?? 0) < ingredients.length ? maxItems : ingredients.length,
               itemBuilder: (context, index) {
                 final ingredient = ingredients[index];
+                final tilt = ((index % 4) - 1.5) * 0.02;
                 return Container(
-                  width: 100, // Set a fixed width for each item
-                  margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8.0),
-                            color: Colors.grey[200],
-                            image: ingredient.imageUrl.isNotEmpty
-                                ? DecorationImage(
-                                    image: NetworkImage(ingredient.imageUrl),
+                  width: 104, // Set a fixed width for each item
+                  margin: const EdgeInsets.symmetric(horizontal: 6.0),
+                  child: Transform.rotate(
+                    angle: tilt,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          // A little photo print pinned to the page.
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFBF6E9),
+                              border: Border.all(color: Colors.white, width: 3),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0x33000000),
+                                  blurRadius: 5,
+                                  offset: Offset(1, 3),
+                                ),
+                              ],
+                            ),
+                            child: ingredient.imageUrl.isNotEmpty
+                                ? Image.network(
+                                    ingredient.imageUrl,
                                     fit: BoxFit.cover,
-                                    onError: (_, __) {},
+                                    errorBuilder: (_, __, ___) =>
+                                        const _IngredientFallback(),
+                                    loadingBuilder: (context, child, p) =>
+                                        p == null
+                                            ? child
+                                            : const _IngredientFallback(),
                                   )
-                                : null,
+                                : const _IngredientFallback(),
                           ),
-                          child: ingredient.imageUrl.isEmpty
-                              ? const Icon(
-                                  Icons.fastfood,
-                                  size: 40,
-                                  color: Colors.grey,
-                                )
-                              : null,
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        ingredient.name,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                        const SizedBox(height: 6),
+                        Text(
+                          ingredient.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: handwritten(fontSize: 18),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },
@@ -102,6 +104,18 @@ class HorizontalList extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _IngredientFallback extends StatelessWidget {
+  const _IngredientFallback();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: AppColors.paperDeep,
+      alignment: Alignment.center,
+      child: const Icon(Icons.egg_alt, size: 34, color: AppColors.inkSoft),
     );
   }
 }

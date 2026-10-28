@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cooka/models/recipe.dart';
 import 'package:cooka/models/ingredient.dart';
+import 'package:cooka/theme/app_theme.dart';
 import 'package:intl/intl.dart';
 
 class ShowRecipeScreen extends StatelessWidget {
@@ -137,13 +138,13 @@ class ShowRecipeScreen extends StatelessWidget {
                           title: Text(
                             ingredient != null ? ingredient.name : "Unknown",
                             style: const TextStyle(
-                                fontFamily: 'SpecialElite', fontSize: 18),
+                                fontSize: 18),
                           ),
                           subtitle: measured != null
                               ? Text(
                                   "${measured.quantity} ${measured.unit.name}",
                                   style: const TextStyle(
-                                      fontFamily: 'SpecialElite'),
+                                      ),
                                 )
                               : null,
                           trailing: ingredient?.imageUrl != null &&
@@ -190,8 +191,8 @@ class ShowRecipeScreen extends StatelessWidget {
                           title: Text(
                             step.title,
                             style: const TextStyle(
-                                fontFamily: 'SpecialElite',
-                                fontWeight: FontWeight.bold),
+                                
+                            fontWeight: FontWeight.bold),
                           ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,7 +200,7 @@ class ShowRecipeScreen extends StatelessWidget {
                               Text(
                                 step.description,
                                 style: const TextStyle(
-                                    fontFamily: 'SpecialElite'),
+                                    ),
                               ),
                               if (step.time != null)
                                 Padding(
@@ -211,7 +212,7 @@ class ShowRecipeScreen extends StatelessWidget {
                                       const SizedBox(width: 4),
                                       Text("${step.time} min",
                                           style: const TextStyle(
-                                              fontFamily: 'SpecialElite')),
+                                              )),
                                     ],
                                   ),
                                 ),
@@ -244,8 +245,8 @@ class ShowRecipeScreen extends StatelessWidget {
                     child: Text(
                       "Last updated: ${DateFormat.yMMMd().format(recipe.lastUpdated)}",
                       style: TextStyle(
-                        fontFamily: 'SpecialElite',
-                        fontSize: 14,
+                        
+                            fontSize: 14,
                         color: Colors.brown[400],
                       ),
                     ),
@@ -334,7 +335,7 @@ class _InfoChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Chip(
       avatar: Icon(icon, color: Colors.brown[700], size: 20),
-      label: Text(label, style: const TextStyle(fontFamily: 'SpecialElite', fontWeight: FontWeight.bold)),
+      label: Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
       backgroundColor: Colors.brown[100],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     );
@@ -371,17 +372,13 @@ class _AncientPaperSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontFamily: 'SpecialElite',
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.brown,
-              letterSpacing: 1.2,
-            ),
+          Text(title, style: handwritten(fontSize: 30, color: AppColors.accent)),
+          Container(
+            margin: const EdgeInsets.only(top: 2, bottom: 10),
+            height: 2,
+            width: 90,
+            color: AppColors.accent,
           ),
-          const SizedBox(height: 12),
           child,
         ],
       ),

@@ -71,26 +71,26 @@ class _MainViewScreenState extends ConsumerState<MainViewScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
+      body: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/paper-square.jpeg'),
+            fit: BoxFit.cover,
+            opacity: 0.25,
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextField(
                 controller: searchController,
-                decoration: InputDecoration(
-                  hintText: 'Search...',
+                decoration: const InputDecoration(
+                  hintText: 'Search a recipe...',
                   prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(
-                      color: Colors.grey[100]!,
-                      width: 0.5,
-                    ),
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
                 ),
                 onChanged: (value) {
                   ref.read(searchRecipeQueryProvider.notifier).state = value;
@@ -119,6 +119,7 @@ class _MainViewScreenState extends ConsumerState<MainViewScreen> {
                 maxItems: 3,
               ),
             ],
+          ),
           ),
         ),
       ),
